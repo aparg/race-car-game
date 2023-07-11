@@ -67,6 +67,11 @@ export default class GameManager {
    */
   #score = 0;
 
+  /**
+   * @type {number}
+   */
+  #velocity = 1;
+
   #scoreInterval;
   #spawnerInterval;
 
@@ -140,7 +145,10 @@ export default class GameManager {
 
     window.addEventListener(
       "keypress",
-      this.#player.onKeyPress.bind(this.#player)
+      (ev) => {
+        this.#player.onKeyPress(ev);
+      },
+      false
     );
     this.#player.draw();
   }
@@ -161,6 +169,7 @@ export default class GameManager {
               ];
             })(),
             Math.floor(Math.random() * -this.#opts.ENEMY_CAR_HEIGHT),
+            this.#velocity,
             this.#ctx
           )
         );
@@ -171,6 +180,7 @@ export default class GameManager {
 
   initScore() {
     this.#scoreInterval = setInterval(() => {
+      if (this.#score % 50 == 0) this.#velocity += 0.25;
       this.#score++;
       this.#onscorechange(this.#score);
     }, 100);
@@ -196,7 +206,7 @@ export default class GameManager {
 
     // Draw enemies
     this.#enemyCars.forEach(async (car, idx) => {
-      car.y += 5;
+      car.y += 5 * car.velocity;
       car.draw();
       if (car.y > window.innerHeight) {
         this.#enemyCars.splice(idx, 1);
@@ -217,7 +227,6 @@ export default class GameManager {
         }
       }
     });
-
     // Draw Bullets
     this.#player.bullets.forEach((bullet, bullet_idx) => {
       bullet.y -= 10;

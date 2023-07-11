@@ -9,12 +9,13 @@ export default class Enemy extends Vehicle {
   /**
    * @param {CanvasRenderingContext2D} ctx
    */
-  constructor(width, height, x, y, ctx) {
+  constructor(width, height, x, y, velocity, ctx) {
     super("enemy", ctx);
     this.width = width;
     this.height = height;
     this.x = x;
     this.y = y;
+    this.velocity = velocity
   }
 
   draw() {

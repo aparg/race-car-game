@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="./index.js" defer></script>
+    <link rel="stylesheet" href="./index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Silkscreen:wght@700&display=swap" rel="stylesheet">
+    <title>Road-racer</title>
+  </head>
+  <body>
+    <div id="instructions" style="position:absolute; font-family:Silkscreen; font-size: 1.25rem; left:0%; margin:10px">
+        ******INSTRUCTIONS*********<br>
+        <br>
+        1)Press "W" to move forward<br>
+        2)Press "A" to move left<br>
+        3)Press "S" to move backward<br>
+        4)Press "D" to move right<br>
+        5)Press "Space" to fire bullet<br>
+        6)Bullets have a cooldown,<br> so make sure to use it wisely!
+    </div>
+    <div id="scoreboard" style="position: absolute; text-align: center; left: 70%; font-family:Silkscreen; font-size: 2rem ">
+      <div>Highscore:<span id="highScore" ></span></div>
+      <div>Score:<span id="score" ></span></div>
+      <div id="lives"></div>
+    </div>
+  </body>
+</html>

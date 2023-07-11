@@ -1,0 +1,27 @@
+body{
+    margin: 0;  
+    background:url("./assets/background.jpg");
+    background-size: cover;
+}
+canvas{
+    border: 1px solid black;
+    background-color: grey;
+    /* color: #3f3f3f */
+}
+
+#instructions{
+    background-color: #fff;
+    border-radius: 5px;
+    padding:20px;
+}
+
+.lives{
+    position: absolute;
+}
+
+#scoreboard{
+    background-color: #fff;
+    border-radius: 5px;
+    padding:20px;
+    top:2%;
+}

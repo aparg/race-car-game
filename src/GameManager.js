@@ -1,7 +1,8 @@
 import Enemy from "./Enemy.js";
+import LaneDivider from "./LaneDivider.js";
 import Player from "./Player.js";
 const bulletCollisionSound = new Audio("./assets/gun.mp3");
-const carsCrash = new Audio("./assets/crash.wav")
+const carsCrash = new Audio("./assets/crash.wav");
 
 export default class GameManager {
   gameOver = false;
@@ -19,6 +20,9 @@ export default class GameManager {
     ENEMY_CAR_HEIGHT: 160,
     PLAYER_CAR_WIDTH: 80,
     PLAYER_CAR_HEIGHT: 160,
+    LANE_WIDTH: 20,
+    LANE_HEIGHT: 50,
+    LANE_POS_Y: 20,
   };
 
   /**
@@ -32,6 +36,15 @@ export default class GameManager {
    * @type {CanvasRenderingContext2D}
    */
   #ctx;
+
+  /**
+   * @type {number[]}
+   */
+  #laneXPositions = [200, 410];
+  /**
+   * @type {LaneDivider[]}
+   */
+  #laneDividers = [];
 
   /**
    * Array of Enemy Cars spawned
@@ -63,6 +76,8 @@ export default class GameManager {
 
   #ongameover = (score) => {};
 
+  #dividers = [];
+
   /**
    * @param {HTMLCanvasElement} canvas
    */
@@ -73,19 +88,41 @@ export default class GameManager {
   }
 
   #drawTrack() {
-    this.#ctx.beginPath()
-    this.#ctx.fillStyle="#3f3f3f"
-    this.#ctx.fillRect(0,0,this.#canvas.width,this.#canvas.height)
+    this.#ctx.beginPath();
+    this.#ctx.fillStyle = "#3f3f3f";
+    this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
 
     this.#ctx.beginPath();
     this.#ctx.fillStyle = "rgba(255 ,255 ,255 ,1)";
-
     //draw lane dividers
-    this.#ctx.fillRect(200, 0, 10, this.#canvas.height);
-    this.#ctx.fillRect(410, 0, 10, this.#canvas.height);
+    // this.#ctx.fillRect(200, 0, 10, 50);
+    // this.#ctx.fillRect(410, 0, 10, 50);
+  }
+
+  #initLaneDivider() {
+    for (let laneX of this.#laneXPositions) {
+      console.log(laneX);
+      let laneY = this.#opts.LANE_POS_Y;
+      while (laneY <= window.innerHeight) {
+        console.log(laneX);
+        this.#laneDividers.push(
+          new LaneDivider(
+            this.#ctx,
+            laneX,
+            laneY,
+            this.#opts.LANE_WIDTH,
+            this.#opts.LANE_HEIGHT
+          )
+        );
+        laneY += 100;
+      }
+    }
+    console.log(this.#laneDividers);
   }
 
   start() {
+    console.log("CALLED START");
+    this.#initLaneDivider();
     this.#initPlayer();
     this.#initEnemySpawner();
     this.initScore();
@@ -96,7 +133,7 @@ export default class GameManager {
     this.#player = new Player(
       this.#opts.PLAYER_CAR_WIDTH,
       this.#opts.PLAYER_CAR_HEIGHT,
-      240,
+      260,
       this.#canvas.height - 200,
       this.#ctx
     );
@@ -116,7 +153,7 @@ export default class GameManager {
             this.#opts.ENEMY_CAR_WIDTH,
             this.#opts.ENEMY_CAR_HEIGHT,
             (() => {
-              this.safeLanes = [40, 240, 460].filter((lane) => {
+              this.safeLanes = [60, 260, 480].filter((lane) => {
                 return this.#enemyCars.every((car) => car.x != lane);
               });
               return this.safeLanes[
@@ -142,8 +179,17 @@ export default class GameManager {
   drawFrame() {
     if (!this.gameOver) requestAnimationFrame(this.drawFrame.bind(this));
     this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-    // this.#ctx.fillStyle="#000"
+    this.#ctx.fillStyle = "#000";
+
+    //Draw track
     this.#drawTrack();
+
+    //Draw lane dividers and move them
+    this.#laneDividers.forEach((divider) => {
+      divider.draw();
+      divider.y += 6;
+      if (divider.y >= window.innerHeight) divider.y = 0;
+    });
 
     // Draw Player
     this.#player.draw();
@@ -156,7 +202,7 @@ export default class GameManager {
         this.#enemyCars.splice(idx, 1);
       }
       if (car.checkCollisionWith(this.#player)) {
-        carsCrash.play()
+        carsCrash.play();
         this.#enemyCars.splice(idx, 1);
         this.#lives--;
 
@@ -168,14 +214,13 @@ export default class GameManager {
           clearInterval(this.#scoreInterval);
           clearInterval(this.#spawnerInterval);
           this.#ongameover(this.#score);
-          
         }
       }
     });
 
     // Draw Bullets
     this.#player.bullets.forEach((bullet, bullet_idx) => {
-      bullet.y -= 5;
+      bullet.y -= 10;
       bullet.draw();
       if (bullet.y < 0) this.#player.bullets.splice(bullet_idx, 1);
 
@@ -187,8 +232,6 @@ export default class GameManager {
         }
       });
     });
-
-    // console.log(this.#player.bullets.length);
   }
 
   getPlayer() {

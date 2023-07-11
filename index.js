@@ -13,7 +13,7 @@ function createGameSpace(width, height) {
 }
 
 // Create canvas
-const [canvas, ctx] = createGameSpace(620, window.innerHeight - 10);
+const [canvas, ctx] = createGameSpace(620, window.innerHeight-1);
 
 const game = new GameManager(canvas);
 

@@ -58,14 +58,14 @@ export default class Player extends Vehicle {
    */
   moveLane(direction) {
     switch (this.x) {
-      case 40:
-        return direction == "left" ? 40 : 240;
+      case 60:
+        return direction == "left" ? 60 : 260;
 
-      case 240:
-        return direction == "left" ? 40 : 460;
+      case 260:
+        return direction == "left" ? 60 : 480;
 
-      case 460:
-        return direction == "left" ? 240 : 460;
+      case 480:
+        return direction == "left" ? 260 : 480;
     }
   }
 

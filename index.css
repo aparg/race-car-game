@@ -1,6 +1,6 @@
 body{
     margin: 0;  
-    background:url("./assets/background.jpg");
+    background:url("./assets/background1.jpg");
     background-size: cover;
 }
 canvas{
@@ -13,6 +13,7 @@ canvas{
     background-color: #fff;
     border-radius: 5px;
     padding:20px;
+    border: 5px solid black;
 }
 
 .lives{
@@ -22,6 +23,7 @@ canvas{
 #scoreboard{
     background-color: #fff;
     border-radius: 5px;
+    border: 5px solid black;
     padding:20px;
     top:2%;
 }
